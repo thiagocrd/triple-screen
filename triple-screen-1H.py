@@ -1,6 +1,11 @@
 import pandas as pd
 import yfinance as yf
 import talib
+from datetime import datetime, timedelta
+
+date_today = datetime.today().strftime('%Y-%m-%d')
+date_one_month_ago = ( datetime.today() - timedelta(days=30) ).strftime('%Y-%m-%d')
+date_three_months_ago = ( datetime.today() - timedelta(days=90) ).strftime('%Y-%m-%d')
 
 df_ibov = pd.read_csv('ibov.csv')
 stocks_list = []
@@ -8,14 +13,14 @@ stocks_list = []
 for i in range(len(df_ibov)):
     stocks_list.append(df_ibov['Ticker'][i]+'.SA')
 
-data = yf.download(stocks_list, start='2020-09-15', end='2021-01-02', group_by='ticker')
+data = yf.download(stocks_list, start=date_three_months_ago, end=date_today, group_by='ticker')
 df_triple_screen = pd.DataFrame()
 
 for i in stocks_list:
     close = data[i]['Close']
     macd, macdsignal, macdhist = talib.MACD(close, fastperiod=12, slowperiod=26, signalperiod=9)
     if (macdhist[-1] > 0):
-        data_1h = yf.download(i, start='2020-12-01', end='2021-01-02', interval='1h')
+        data_1h = yf.download(i, start=date_one_month_ago, end=date_today, interval='1h')
         data_1h = data_1h[ data_1h['Volume'] > 0 ]
         high = data_1h['High']
         low = data_1h['Low']
