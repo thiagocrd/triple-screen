@@ -1,1 +1,1 @@
-# triple-screen-1H
+# triple-screen
