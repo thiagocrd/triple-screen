@@ -26,7 +26,8 @@ for i in stocks_list:
     # Verificamos quais ativos têm o histograma MACD positivo no 1D
     if (macdhist[-1] > 0):
         
-        # Colocamos end com a data do dia seguinte porque assim conseguimos os preços do dia atual no timeframe horário. Se colocássemos end com a data atual, teríamos os preços do último pregão.
+        # Colocamos end com a data do dia seguinte porque assim conseguimos os preços do dia atual no timeframe horário.
+        # Se colocássemos end com a data atual, teríamos os preços do último pregão.
         data_1h = yf.download(i, start=date_one_month_ago, end=date_tomorrow, interval='1h')
         data_1h = data_1h[ data_1h['Volume'] > 0 ]
         
