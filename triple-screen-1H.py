@@ -43,6 +43,7 @@ for i in stocks_list:
             new_row = {'Ticker':i, 'MACD_HIST':macdhist[-1], 'STOCH':slowk[-1]}
             df_triple_screen = df_triple_screen.append(new_row, ignore_index=True)
 
-# Ordenamos as colunas do df_triple_screen e mostramos
+# Organizamos as colunas do df_triple_screen e ordenamos pelo valor do estocástico
 df_triple_screen = df_triple_screen[['Ticker', 'MACD_HIST', 'STOCH']]
+df_triple_screen.sort_values(by='STOCH', ascending=False, inplace=True)
 print(df_triple_screen)
