@@ -15,7 +15,7 @@ stocks_list = []
 for i in range(len(df_ibov)):
     stocks_list.append(df_ibov['Ticker'][i]+'.SA')
 
-data = yf.download(stocks_list, start=date_three_months_ago, end='2021-01-05', group_by='ticker')
+data = yf.download(stocks_list, start=date_three_months_ago, end=date_tomorrow, group_by='ticker')
 df_triple_screen = pd.DataFrame()
 
 for i in stocks_list:

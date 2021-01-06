@@ -4,6 +4,7 @@ import talib
 from datetime import datetime, timedelta
 
 date_today = datetime.today().strftime('%Y-%m-%d')
+date_tomorrow = ( datetime.today() + timedelta(days=1) ).strftime('%Y-%m-%d')
 date_two_months_ago = ( datetime.today() - timedelta(days=60) ).strftime('%Y-%m-%d')
 date_sixteen_months_ago = ( datetime.today() - timedelta(days=480) ).strftime('%Y-%m-%d')
 
@@ -13,7 +14,7 @@ stocks_list = []
 for i in range(len(df_ibov)):
     stocks_list.append(df_ibov['Ticker'][i]+'.SA')
     
-data = yf.download(stocks_list, start=date_sixteen_months_ago, end=date_today, group_by='ticker', interval='1wk')
+data = yf.download(stocks_list, start=date_sixteen_months_ago, end=date_tomorrow, group_by='ticker', interval='1wk')
 df_triple_screen = pd.DataFrame()
 
 for i in stocks_list:
@@ -22,10 +23,6 @@ for i in stocks_list:
     
     last_day = close.index[-1].strftime('%Y-%m-%d')
     week_day = datetime.strptime(last_day, '%Y-%m-%d').strftime('%a')
-    
-    # Se a última linha for de um dia diferente de domingo, desconsideramos essa linha (na série semanal os preços ficam datados a cada domingo)
-    if (week_day != 'Sun'):
-        close = close[:-1]
     
     # Rodamos o algoritmo apenas para ações cujo dataframe de preços não esteja vazio (após o close.dropna(), dataframe com preços NaN ficam vazios)
     if (close.empty == False):
@@ -42,4 +39,5 @@ for i in stocks_list:
                 df_triple_screen = df_triple_screen.append(new_row, ignore_index=True)
 
 df_triple_screen = df_triple_screen[['Ticker', 'MACD_HIST', 'STOCH']]
+df_triple_screen.sort_values(by='STOCH', ascending=False, inplace=True)
 print(df_triple_screen)
