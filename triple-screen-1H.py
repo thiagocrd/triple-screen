@@ -21,6 +21,7 @@ df_triple_screen = pd.DataFrame()
 for i in stocks_list:
     close = data[i]['Close']
     
+    # Cálculo do MACD no timeframe 1D
     macd, macdsignal, macdhist = talib.MACD(close, fastperiod=12, slowperiod=26, signalperiod=9)
     
     # Verificamos quais ativos têm o histograma MACD positivo no 1D
